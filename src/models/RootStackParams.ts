@@ -1,10 +1,13 @@
-import { StackScreenProps } from '@react-navigation/stack';
+import {StackScreenProps} from '@react-navigation/stack';
 
 export type RootStackParamList = {
-    EventDetail:undefined;
-    Home: undefined;
-    Login: undefined;
-    TicketSelection:undefined;
+  EventDetail: undefined;
+  Home: undefined;
+  Login: undefined;
+  TicketSelection: undefined;
 };
 
-export type RootStackScreenProps<T extends keyof RootStackParamList> = StackScreenProps<RootStackParamList, T>;
+export type RootStackScreenProps<T extends keyof RootStackParamList> = StackScreenProps<
+  RootStackParamList,
+  T
+>;
