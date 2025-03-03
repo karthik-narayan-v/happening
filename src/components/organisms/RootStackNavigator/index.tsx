@@ -11,7 +11,7 @@ export type AppPage = {
 
 const Stack = createStackNavigator<RootStackParamList>();
 
-export const RooStackNavigator = ({appPagesArray}: RootStackProps): ReactElement => (
+export const RootStackNavigator = ({appPagesArray}: RootStackProps): ReactElement => (
   <Stack.Navigator>
     {appPagesArray.map(screen => {
       return (

@@ -5,6 +5,11 @@ export type RootStackParamList = {
   Home: undefined;
   Login: undefined;
   TicketSelection: undefined;
+  Menu: undefined;
+  Wishlist: undefined;
+  Booking: undefined;
+  Account: undefined;
+  Search: undefined;
 };
 
 export type RootStackScreenProps<T extends keyof RootStackParamList> = StackScreenProps<
