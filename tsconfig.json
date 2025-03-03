@@ -2,13 +2,14 @@
   "extends": "@react-native/typescript-config/tsconfig.json",
   "compilerOptions": {
     "strict": true,
-    "baseUrl": ".",
+    "baseUrl": "./",
     "paths": {
-      "assets/*": ["src/assets/*"],
-      "components/*": ["src/components/*"],
-      "theme/*": ["src/themes/*"],
-      "models/*": ["src/models/*"],
-      "contexts/*": ["src/contexts/*"]
+      "@atoms/*": ["src/components/atoms/*"],
+      "@molecules/*": ["src/components/molecules/*"],
+      "@organisms/*": ["src/components/organisms/*"],
+      "@screens/*": ["src/components/pages/*"],
+      "@models/*": ["src/models/*"],
+      "@assets/*": ["src/assets/*"]
     }
   }
 }

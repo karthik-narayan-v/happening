@@ -1,17 +1,9 @@
 import React from 'react';
 import {RootStackScreenProps} from '../../../models/RootStackParams';
-import {
-  Box,
-  Button,
-  ButtonText,
-  FormControl,
-  Heading,
-  Input,
-  InputField,
-  VStack,
-} from '@gluestack-ui/themed';
+import {Box, Button, ButtonText, FormControl, Heading, VStack} from '@gluestack-ui/themed';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {SvgLogo, SvgSocial} from '../../../models/Image';
+import HaInputField from '../../../components/atoms/HaInputField';
 
 const Login = ({navigation}: RootStackScreenProps<'Login'>) => {
   const insets = useSafeAreaInsets();
@@ -30,69 +22,56 @@ const Login = ({navigation}: RootStackScreenProps<'Login'>) => {
   const onLogin = () => {
     navigation.navigate('Menu');
   };
+
+  const handleEmailChange = (text: string) => {
+    setEmail(text);
+  };
+
+  const handleOTPSubmit = (text: string) => {
+    setOtp(text);
+  };
   return (
-    <VStack width="100%" height="100%" backgroundColor="#FFF" paddingHorizontal={24}>
+    <VStack width="100%" height="100%" backgroundColor="#FFF" paddingHorizontal={36}>
       <Box marginTop={108} marginBottom={52} alignItems="center">
         {SvgLogo('180px', '85px')}
       </Box>
-
       <Heading
         fontFamily="Poppins-Regular"
         fontWeight={400}
         lineHeight={24}
         fontSize={16}
-        marginHorizontal={40}
+        marginHorizontal={52}
         textAlign="center"
-        color="#000000">
+        color="$black">
         {'Login now to find whats happening around you'}
       </Heading>
-      <FormControl marginTop={24} isInvalid={isInvalid} gap={24}>
-        <Input borderWidth={1} borderRadius={30} borderColor="#D9D9D9" backgroundColor="#FBFBFB">
-          <InputField
-            placeholder="Enter email address or mobile number"
-            textAlign="center"
-            fontFamily="Poppins-Regular"
-            fontWeight={400}
-            lineHeight={21}
-            fontSize={14}
-            color={'#A3A3A3'}
-            value={email}
-            onChangeText={text => setEmail(text)}
-          />
-        </Input>
-        <Input borderWidth={1} borderRadius={30} borderColor="#D9D9D9" backgroundColor="#FBFBFB">
-          <InputField
-            placeholder="Click on Send OTP"
-            textAlign="center"
-            fontFamily="Poppins-Regular"
-            fontWeight={400}
-            lineHeight={21}
-            fontSize={14}
-            color={'#A3A3A3'}
-            value={otp}
-            onChangeText={text => setOtp(text)}
-          />
-        </Input>
+      <FormControl marginTop={40} isInvalid={isInvalid} gap={24}>
+        <HaInputField
+          placeholder={'Enter email address or mobile number'}
+          value={email}
+          onChange={handleEmailChange}
+        />
+        <HaInputField placeholder={'Click on Send OTP'} value={otp} onChange={handleOTPSubmit} />
         <Button
-          width={'auto'}
           backgroundColor="$primary600"
           borderWidth={1}
           borderRadius={30}
-          borderColor="#D9D9D9"
+          borderColor="$gray100"
           paddingHorizontal={16}
           paddingVertical={10}
-          onPress={onLogin}>
+          onPress={onLogin}
+          action="primary">
           <ButtonText
             fontFamily="Poppins-Regular"
             fontWeight={400}
             lineHeight={21}
             fontSize={14}
-            color={'#FFF'}
+            color={'$white'}
             textAlign="center">
             {'Login'}
           </ButtonText>
         </Button>
-        <Button alignSelf="flex-end" marginHorizontal={16} onPress={handleSubmit}>
+        <Button alignSelf="flex-end" onPress={handleSubmit}>
           <ButtonText
             fontFamily="Poppins-Regular"
             fontWeight={400}
@@ -110,7 +89,7 @@ const Login = ({navigation}: RootStackScreenProps<'Login'>) => {
         fontSize={16}
         marginTop={56}
         textAlign="center"
-        color="#A3A3A3">
+        color="$gray200">
         {'or'}
       </Heading>
       <Heading
@@ -118,12 +97,12 @@ const Login = ({navigation}: RootStackScreenProps<'Login'>) => {
         fontWeight={400}
         lineHeight={24}
         fontSize={16}
-        marginTop={24}
+        marginTop={12}
         textAlign="center"
-        color="#A3A3A3">
+        color="$gray200">
         {'Sign in with other accounts'}
       </Heading>
-      <Box marginTop={24} alignItems="center">
+      <Box marginTop={12} alignItems="center">
         <SvgSocial />
       </Box>
     </VStack>

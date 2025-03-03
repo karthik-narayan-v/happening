@@ -40,27 +40,27 @@ export const SvgSocial = () => {
 };
 
 export const SvgBell = () => {
-  return <BellSvg width={'20px'} height={'25px'} testID="bellSvg" />;
+  return <BellSvg testID="bellSvg" />;
 };
 
-export const SvgAccount = () => {
-  return <AccountSvg width={'16px'} height={'18px'} testID="accountSvg" />;
+export const SvgAccount = (color: any) => {
+  return <AccountSvg width={'16px'} height={'18px'} color={color} testID="accountSvg" />;
 };
 
-export const SvgBooking = () => {
-  return <BookingSvg width={'16px'} height={'18px'} testID="bookingSvg" />;
+export const SvgBooking = (color: any) => {
+  return <BookingSvg width={'16px'} height={'18px'} color={color} testID="bookingSvg" />;
 };
 
-export const SvgHome = () => {
-  return <HomeSvg width={'16px'} height={'18px'} testID="homeSvg" />;
+export const SvgHome = (color: any) => {
+  return <HomeSvg width={'16px'} height={'18px'} color={color} testID="homeSvg" />;
 };
 
-export const SvgHeart = () => {
-  return <HeartSvg width={'16px'} height={'18px'} testID="heartSvg" />;
+export const SvgHeart = (color: any) => {
+  return <HeartSvg width={'16px'} height={'18px'} color={color} testID="heartSvg" />;
 };
 
-export const SvgSearch = () => {
-  return <SearchSvg width={'16px'} height={'18px'} testID="searchSvg" />;
+export const SvgSearch = (color: any) => {
+  return <SearchSvg width={'16px'} height={'18px'} color={color} testID="searchSvg" />;
 };
 
 export const SvgLocation = () => {
