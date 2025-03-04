@@ -1,6 +1,6 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {RootStackScreenProps} from '../../../models/RootStackParams';
-import {Box, Button, ButtonText, Heading, ScrollView, VStack} from '@gluestack-ui/themed';
+import {Box, Button, ButtonText, Heading, ScrollView, useToken, VStack} from '@gluestack-ui/themed';
 import eventDetails from '../../../models/json/eventDetails';
 import {Image, Pressable} from 'react-native';
 import images from '../../../assets/png/images';
@@ -23,8 +23,19 @@ import {
   SvgFood,
   SvgMap,
 } from '../../../models/Image';
+import IconDetail from '../../../components/molecules/IconDetail';
 const EventDetail = ({navigation}: RootStackScreenProps<'EventDetail'>) => {
+  const [selectedTab, setSelectedTab] = useState(0);
+  const [slotSelected, setSlotSelected] = useState(false);
   const detailSubTiles = ['About', 'Crew'];
+  const handleBack = () => {
+    navigation.goBack();
+  };
+  const orange600 = useToken('colors', 'orange600');
+  const secondary500 = useToken('colors', 'secondary500');
+  const secondary400 = useToken('colors', 'secondary400');
+  const primary700 = useToken('colors', 'primary700');
+  // const white100= useToken('colors', 'white100');
   return (
     <VStack width="100%" height="100%">
       <Box width={'100%'} height={'auto'}>
@@ -34,71 +45,65 @@ const EventDetail = ({navigation}: RootStackScreenProps<'EventDetail'>) => {
           alt={'cover image'}
           style={{width: 'auto', height: 230}}
         />
-        <Box
-          flexDirection="row"
-          position="absolute"
-          width={'100%'}
-          justifyContent="space-between"
-          top={24}>
-          <Box
-            justifyContent="center"
-            alignItems="center"
-            width={24}
-            height={24}
-            backgroundColor="#F9F5FD"
-            alignSelf="flex-end"
-            borderRadius={20}
-            left={24}>
-            <SvgChevronLeft />
+        <Box position="absolute" height={230} paddingTop={24} justifyContent="space-between">
+          <Box flexDirection="row" width={'100%'} justifyContent="space-between">
+            <Pressable onPress={handleBack}>
+              <Box
+                justifyContent="center"
+                alignItems="center"
+                width={24}
+                height={24}
+                backgroundColor="$white"
+                borderRadius={20}
+                left={24}>
+                <SvgChevronLeft />
+              </Box>
+            </Pressable>
+
+            <Box
+              justifyContent="center"
+              alignItems="center"
+              width={24}
+              height={24}
+              backgroundColor="$white"
+              borderRadius={20}
+              right={24}>
+              <SvgShare />
+            </Box>
           </Box>
-          <Box
-            justifyContent="center"
-            alignItems="center"
-            width={24}
-            height={24}
-            backgroundColor="#F9F5FD"
-            alignSelf="flex-end"
-            borderRadius={20}
-            right={24}>
-            <SvgShare />
+          <Box width={'100%'} flexDirection="row" paddingHorizontal={24}>
+            {detailSubTiles.map((item: string, index: number) => {
+              const isSelected = selectedTab === index;
+              return (
+                <Pressable key={item} onPress={() => setSelectedTab(index)}>
+                  <Box
+                    backgroundColor={isSelected ? '$white' : '$white100'}
+                    paddingHorizontal={16}
+                    paddingVertical={5}
+                    borderWidth={1}
+                    borderBottomWidth={0}
+                    borderColor={isSelected ? '$white' : '$primary300'}
+                    borderTopLeftRadius={10}
+                    borderTopRightRadius={10}>
+                    <Heading
+                      marginVertical={'$0'}
+                      color={isSelected ? '$primary600' : secondary500}
+                      fontFamily="Poppins-Regular"
+                      fontWeight={400}
+                      lineHeight={18}
+                      fontSize={12}>
+                      {item}
+                    </Heading>
+                  </Box>
+                </Pressable>
+              );
+            })}
           </Box>
-        </Box>
-        <Box
-          top={197}
-          position="absolute"
-          alignSelf="flex-end"
-          width={'100%'}
-          flexDirection="row"
-          paddingHorizontal={24}>
-          {detailSubTiles.map((item: string, index: number) => {
-            return (
-              <Pressable key={item}>
-                <Box
-                  backgroundColor="#F9F5FD"
-                  paddingHorizontal={16}
-                  paddingVertical={5}
-                  borderWidth={1}
-                  borderBottomWidth={0}
-                  borderColor="#7E2CCF"
-                  borderTopLeftRadius={10}
-                  borderTopRightRadius={10}>
-                  <Heading
-                    marginVertical={'$0'}
-                    fontFamily="Poppins-Regular"
-                    fontWeight={500}
-                    lineHeight={21}
-                    fontSize={14}>
-                    {item}
-                  </Heading>
-                </Box>
-              </Pressable>
-            );
-          })}
         </Box>
       </Box>
-      <ScrollView paddingHorizontal={24} height={'100%'} width={'100%'}>
+      <ScrollView backgroundColor="$white" paddingHorizontal={24} height={'100%'} width={'100%'}>
         <Heading
-          color="#3C3C3C"
+          color="$gray300"
           fontFamily="Poppins-Regular"
           fontWeight={500}
           lineHeight={27}
@@ -106,31 +111,29 @@ const EventDetail = ({navigation}: RootStackScreenProps<'EventDetail'>) => {
           {eventDetails[0].title}
         </Heading>
         <Box flexDirection="row" alignItems="center" justifyContent="space-between">
-          <Box flexDirection="row" gap={8} alignItems="center" justifyContent="space-between">
-            <Box flexDirection="row" gap={8}>
-              <SvgFilledHeart />
-              <Heading
-                marginVertical={'$0'}
-                color="$primary600"
-                fontFamily="Poppins-Regular"
-                fontWeight={400}
-                lineHeight={17}
-                fontSize={14}>
-                {`${eventDetails[0].interested} Intrested`}
-              </Heading>
-            </Box>
+          <Box flexDirection="row" gap={16} alignItems="center" justifyContent="space-between">
+            <IconDetail
+              icon={<SvgFilledHeart />}
+              title={`${eventDetails[0].interested} intrested`}
+              color={'$primary600'}
+              gap={12}
+              fontFamily="Inter-regular"
+              lineHeight={17}
+              fontSize={14}
+            />
             <Box
-              padding={4}
+              padding={8}
               flexDirection="row"
               alignItems="center"
-              gap={8}
-              backgroundColor="#F9F5FD"
+              gap={4}
+              borderRadius={5}
+              backgroundColor="$primary300"
               borderWidth={1}
-              borderColor="#EEE6F9">
+              borderColor="$primary100">
               <SvgPlay />
               <Heading
                 marginVertical={'$0'}
-                color="#000000"
+                color="$black"
                 fontFamily="Poppins-Regular"
                 fontWeight={400}
                 lineHeight={18}
@@ -138,88 +141,46 @@ const EventDetail = ({navigation}: RootStackScreenProps<'EventDetail'>) => {
                 {`Teaser`}
               </Heading>
             </Box>
-            <Box padding={4} flexDirection="row" alignItems="center" gap={8}>
-              <SvgThunder />
-              <Heading
-                marginVertical={'$0'}
-                color="#FF935B"
-                fontFamily="Poppins-Regular"
-                fontWeight={400}
-                lineHeight={18}
-                fontSize={12}>
-                {`Fast filling`}
-              </Heading>
-            </Box>
+            <IconDetail
+              icon={<SvgThunder />}
+              title={`Fast filling`}
+              color={orange600}
+              gap={4}
+              lineHeight={18}
+              fontSize={12}
+            />
           </Box>
           <SvgHeart />
         </Box>
 
-        <Box flexDirection="row" marginTop={12} gap={16} alignItems="center">
-          <Box flexDirection="row" alignItems="center" gap={8}>
-            <SvgTime />
-            <Heading
-              marginVertical={'$0'}
-              color="#757575"
-              fontFamily="Poppins-Regular"
-              fontWeight={400}
-              lineHeight={21}
-              fontSize={14}>
-              {eventDetails[0].duration}
-            </Heading>
-          </Box>
-          <Box flexDirection="row" alignItems="center" gap={8}>
-            <SvgUser />
-            <Heading
-              marginVertical={'$0'}
-              color="#757575"
-              fontFamily="Poppins-Regular"
-              fontWeight={400}
-              lineHeight={21}
-              fontSize={14}>
-              {`${eventDetails[0].ageCategory} years+`}
-            </Heading>
-          </Box>
-          <Box flexDirection="row" alignItems="center" gap={8}>
-            <SvgMusic />
-            <Heading
-              marginVertical={'$0'}
-              color="#757575"
-              fontFamily="Poppins-Regular"
-              fontWeight={400}
-              lineHeight={21}
-              fontSize={14}>
-              {eventDetails[0].genre}
-            </Heading>
-          </Box>
+        <Box flexDirection="row" marginVertical={12} gap={16} alignItems="center">
+          <IconDetail icon={<SvgTime />} title={eventDetails[0].duration} color={secondary500} />
+          <IconDetail
+            icon={<SvgUser />}
+            title={`${eventDetails[0].ageCategory} years+`}
+            color={secondary500}
+          />
+          <IconDetail
+            icon={<SvgMusic />}
+            title={eventDetails[0].genre.join(', ')}
+            color={secondary500}
+          />
         </Box>
-        <Box marginTop={12} flexDirection="row" alignItems="center" gap={8}>
-          <SvgLanguage />
+        <IconDetail
+          icon={<SvgLanguage />}
+          title={eventDetails[0].languages.join(', ')}
+          color={secondary500}
+        />
+        <IconDetail
+          icon={<SvgCalendar />}
+          title={eventDetails[0].eventDate}
+          color={secondary500}
+          marginVertical={12}
+        />
+        <Box flexDirection="row" alignItems="center" gap={8}>
           <Heading
             marginVertical={'$0'}
-            color="#757575"
-            fontFamily="Poppins-Regular"
-            fontWeight={400}
-            lineHeight={21}
-            fontSize={14}>
-            {eventDetails[0].languages}
-          </Heading>
-        </Box>
-        <Box marginTop={12} flexDirection="row" alignItems="center" gap={8}>
-          <SvgCalendar />
-          <Heading
-            marginVertical={'$0'}
-            color="#757575"
-            fontFamily="Poppins-Regular"
-            fontWeight={400}
-            lineHeight={21}
-            fontSize={14}>
-            {eventDetails[0].eventDate}
-          </Heading>
-        </Box>
-        <Box marginTop={12} flexDirection="row" alignItems="center" gap={8}>
-          <Heading
-            marginVertical={'$0'}
-            color="#757575"
+            color={secondary500}
             fontFamily="Poppins-Regular"
             fontWeight={400}
             lineHeight={17}
@@ -228,7 +189,7 @@ const EventDetail = ({navigation}: RootStackScreenProps<'EventDetail'>) => {
           </Heading>
           <Heading
             marginVertical={'$0'}
-            color="#757575"
+            color={secondary500}
             fontFamily="Poppins-Regular"
             fontWeight={500}
             lineHeight={17}
@@ -236,42 +197,44 @@ const EventDetail = ({navigation}: RootStackScreenProps<'EventDetail'>) => {
             {eventDetails[0].priceRange}
           </Heading>
         </Box>
-        <Box borderWidth={1} borderColor="#E8DFF4" marginVertical={12} />
-        <Box flexDirection="row" alignItems="center" gap={4}>
-          <Box flexDirection="row" alignItems="center" gap={8}>
-            <SvgFilledLocation />
-            <Heading
-              marginVertical={'$0'}
-              color="#3C#C#C"
-              fontFamily="Poppins-Regular"
-              fontWeight={500}
-              lineHeight={21}
-              fontSize={14}>
-              {eventDetails[0].location}
-            </Heading>
-          </Box>
-          <SvgInfo />
-        </Box>
-        <Box marginTop={12} flexDirection="row" alignItems="center" gap={4}>
-          <Box
-            backgroundColor="#FBFBFB"
-            padding={4}
-            borderWidth={1}
-            borderColor="#F1E6FF"
-            borderRadius={20}>
-            <Heading
-              marginVertical={'$0'}
-              color="$primary600"
-              fontFamily="Poppins-Regular"
-              fontWeight={400}
-              lineHeight={21}
-              fontSize={14}>
-              {eventDetails[0].slot.time}
-            </Heading>
-          </Box>
+        <Box borderWidth={1} borderColor={primary700} marginVertical={12} />
+        <Box flexDirection="row" alignItems="center" gap={8}>
+          <SvgFilledLocation />
           <Heading
             marginVertical={'$0'}
-            color="#FF935B"
+            color="$gray300"
+            fontFamily="Poppins-Regular"
+            fontWeight={500}
+            lineHeight={21}
+            fontSize={14}>
+            {eventDetails[0].location}
+          </Heading>
+          <SvgInfo />
+        </Box>
+        <Box marginTop={12} flexDirection="row" alignItems="center" gap={8}>
+          <Pressable onPress={() => setSlotSelected(!slotSelected)}>
+            <Box
+              backgroundColor={'$white100'}
+              paddingHorizontal={8}
+              paddingVertical={4}
+              borderWidth={1}
+              borderColor={slotSelected ? '$primary600' : '$secondary700'}
+              borderRadius={20}>
+              <Heading
+                marginVertical={'$0'}
+                color={secondary500}
+                fontFamily="Poppins-Regular"
+                fontWeight={400}
+                lineHeight={21}
+                fontSize={14}>
+                {eventDetails[0].slot.time}
+              </Heading>
+            </Box>
+          </Pressable>
+
+          <Heading
+            marginVertical={'$0'}
+            color={orange600}
             fontFamily="Poppins-Regular"
             fontWeight={400}
             lineHeight={18}
@@ -279,7 +242,7 @@ const EventDetail = ({navigation}: RootStackScreenProps<'EventDetail'>) => {
             {`${eventDetails[0].slot.tickets} seats left`}
           </Heading>
         </Box>
-        <Box marginTop={12} flexDirection="row" alignItems="center" gap={8}>
+        <Box marginTop={12} flexDirection="row" alignItems="center" gap={16}>
           <SvgParking />
           <SvgWheelChair />
           <SvgFood />
@@ -287,7 +250,7 @@ const EventDetail = ({navigation}: RootStackScreenProps<'EventDetail'>) => {
             <SvgMap />
             <Heading
               marginVertical={'$0'}
-              color="#7A7A7A"
+              color={secondary400}
               fontFamily="Poppins-Regular"
               fontWeight={400}
               lineHeight={21}
@@ -298,11 +261,11 @@ const EventDetail = ({navigation}: RootStackScreenProps<'EventDetail'>) => {
             </Heading>
           </Box>
         </Box>
-        <Box borderWidth={1} borderColor="#E8DFF4" marginVertical={12} />
+        <Box borderWidth={1} borderColor={primary700} marginVertical={12} />
         <Box marginTop={12} width={'100%'}>
           <Heading
             marginVertical={'$0'}
-            color="#757575"
+            color={secondary500}
             fontFamily="Poppins-Regular"
             fontWeight={500}
             lineHeight={21}
@@ -312,7 +275,7 @@ const EventDetail = ({navigation}: RootStackScreenProps<'EventDetail'>) => {
           {eventDetails[0].policies.map(item => (
             <Heading
               marginVertical={'$0'}
-              color="#757575"
+              color={secondary500}
               fontFamily="Poppins-Regular"
               fontWeight={400}
               lineHeight={21}
@@ -324,7 +287,7 @@ const EventDetail = ({navigation}: RootStackScreenProps<'EventDetail'>) => {
         <Box marginTop={12} width={'100%'}>
           <Heading
             marginVertical={'$0'}
-            color="#757575"
+            color={secondary500}
             fontFamily="Poppins-Regular"
             fontWeight={500}
             lineHeight={21}
@@ -334,7 +297,7 @@ const EventDetail = ({navigation}: RootStackScreenProps<'EventDetail'>) => {
           {eventDetails[0].offers.map(item => (
             <Heading
               marginVertical={'$0'}
-              color="#757575"
+              color={secondary500}
               fontFamily="Poppins-Regular"
               fontWeight={400}
               lineHeight={21}
@@ -345,37 +308,43 @@ const EventDetail = ({navigation}: RootStackScreenProps<'EventDetail'>) => {
         </Box>
       </ScrollView>
       <Box
+        backgroundColor="$white"
         width={'100%'}
         borderWidth={1}
-        justifyContent="space-around"
+        paddingHorizontal={12}
+        paddingVertical={16}
+        justifyContent={'flex-end'}
         flexDirection="row"
-        padding={24}
-        borderColor="#E5E5E5"
+        borderColor="$gray50"
+        gap={22}
         alignItems="center">
-        <Box />
-        <Heading
-          marginVertical={'$0'}
-          color="#757575"
-          fontFamily="Poppins-Regular"
-          fontWeight={400}
-          lineHeight={21}
-          fontSize={14}>
-          {' Select time slot to proceed'}
-        </Heading>
+        {!slotSelected && (
+          <Heading
+            marginVertical={'$0'}
+            color="$warmGray400"
+            fontFamily="Poppins-Regular"
+            fontWeight={400}
+            lineHeight={21}
+            fontSize={14}>
+            {' Select time slot to proceed'}
+          </Heading>
+        )}
 
         <Button
           backgroundColor="$primary600"
           borderWidth={1}
           borderRadius={20}
           borderColor="#D9D9D9"
-          padding={10}
-          onPress={() => navigation.navigate('TicketSelection')}>
+          paddingHorizontal={16}
+          paddingVertical={4}
+          onPress={slotSelected ? () => navigation.navigate('TicketSelection') : () => {}}
+          opacity={slotSelected ? 1 : 0.7}>
           <ButtonText
             fontFamily="Poppins-Regular"
             fontWeight={400}
-            lineHeight={21}
-            fontSize={14}
-            color={'#FFF'}
+            lineHeight={24}
+            fontSize={16}
+            color={'$white'}
             textAlign="center">
             {'Proceed'}
           </ButtonText>
