@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useContext, useState} from 'react';
 import {RootStackScreenProps} from '../../../models/RootStackParams';
 import {Box, FlatList, Heading, HStack, ScrollView, useToken, VStack} from '@gluestack-ui/themed';
 import {SvgLocation, SvgClose} from '../../../models/Image';
@@ -7,6 +7,7 @@ import categories from '../../../models/json/categories';
 import popular from '../../../models/json/popular';
 import resumeshow from '../../../models/json/resumeshow';
 import images from '../../../assets/png/images';
+import {LocationContext} from '../../../../src/contexts/LocationContext';
 const Home = ({navigation}: RootStackScreenProps<'Home'>) => {
   const eventTypes = ['Entertainment', 'Academic', 'Volunteering'];
   const [selectedEvent, setSelectedEvent] = useState(0);
@@ -57,41 +58,47 @@ const Home = ({navigation}: RootStackScreenProps<'Home'>) => {
   const category = chunkArray(categories, 2);
   const popularShows = chunkArray(popular, 1);
   const resumingShows = chunkArray(resumeshow, 1);
-
+  const {handlePopup} = useContext(LocationContext);
+  const onBarPress = () => {
+    handlePopup(true);
+  };
   return (
     <ScrollView height={'100%'} backgroundColor="$white">
-      <Box
-        alignItems="center"
-        flexDirection="row"
-        backgroundColor="$primary300"
-        marginTop={9}
-        marginHorizontal={24}
-        paddingHorizontal={12}
-        paddingVertical={4}
-        gap={12}
-        borderRadius={5}>
-        <SvgLocation />
-        <VStack width={'100%'}>
-          <Heading
-            marginVertical={'$0'}
-            color="$primary600"
-            fontFamily="Poppins-Regular"
-            fontWeight={500}
-            lineHeight={21}
-            fontSize={14}>
-            Bangalore
-          </Heading>
-          <Heading
-            marginVertical={'$0'}
-            color="$black"
-            fontFamily="Poppins-Regular"
-            fontWeight={400}
-            lineHeight={18}
-            fontSize={12}>
-            #2 KR Layout, Indiranagar
-          </Heading>
-        </VStack>
-      </Box>
+      <Pressable onPress={onBarPress}>
+        <Box
+          alignItems="center"
+          flexDirection="row"
+          backgroundColor="$primary300"
+          marginTop={9}
+          marginHorizontal={24}
+          paddingHorizontal={12}
+          paddingVertical={4}
+          gap={12}
+          borderRadius={5}>
+          {SvgLocation('20px', '25px')}
+          <VStack width={'100%'}>
+            <Heading
+              marginVertical={'$0'}
+              color="$primary600"
+              fontFamily="Poppins-Regular"
+              fontWeight={500}
+              lineHeight={21}
+              fontSize={14}>
+              Bangalore
+            </Heading>
+            <Heading
+              marginVertical={'$0'}
+              color="$black"
+              fontFamily="Poppins-Regular"
+              fontWeight={400}
+              lineHeight={18}
+              fontSize={12}>
+              #2 KR Layout, Indiranagar
+            </Heading>
+          </VStack>
+        </Box>
+      </Pressable>
+
       {renderEventTab()}
       <Heading
         marginTop={24}
@@ -122,14 +129,27 @@ const Home = ({navigation}: RootStackScreenProps<'Home'>) => {
                 flexDirection="row"
                 alignItems="flex-end"
                 justifyContent="center">
-                {/* <Box> */}
                 <Image
                   resizeMode="cover"
                   source={images[listItem.image]}
                   alt={listItem.image}
                   style={{width: 90, height: 70, borderRadius: 10}}
                 />
-                {/* </Box> */}
+                <Box width={90} height={70} position="absolute" justifyContent="flex-end">
+                  <Box width={'100%'} height={21} backgroundColor="#F9F5FDE5">
+                    <Heading
+                      height={21}
+                      marginTop={0}
+                      fontFamily="Poppins-Regular"
+                      fontWeight={500}
+                      fontSize={14}
+                      lineHeight={21}
+                      color="$secondary900"
+                      textAlign="center">
+                      {listItem.title}
+                    </Heading>
+                  </Box>
+                </Box>
               </Box>
             ))}
           </Box>

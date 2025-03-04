@@ -30,6 +30,8 @@ import GoldSvg from '../assets/svg/gold.svg';
 import PlatinumSvg from '../assets/svg/platinum.svg';
 import PlusSvg from '../assets/svg/plus.svg';
 import MinusSvg from '../assets/svg/minus.svg';
+import RadioSelectedSvg from '../assets/svg/radio_selected.svg';
+import RadioNotSelectedSvg from '../assets/svg/radio_notselected.svg';
 
 export const SvgLogo = (width: string, height: string) => {
   return <LogoSvg width={width} height={height} testID="logoSvg" />;
@@ -63,8 +65,8 @@ export const SvgSearch = (color: any) => {
   return <SearchSvg width={'16px'} height={'18px'} color={color} testID="searchSvg" />;
 };
 
-export const SvgLocation = () => {
-  return <LocationSvg width={'20px'} height={'25px'} testID="locationSvg" />;
+export const SvgLocation = (width: string, height: string) => {
+  return <LocationSvg width={width} height={height} testID="locationSvg" />;
 };
 
 export const SvgClose = () => {
@@ -153,4 +155,12 @@ export const SvgPlus = () => {
 
 export const SvgMinus = () => {
   return <MinusSvg testID="minusSvg" />;
+};
+
+export const SvgRadioSelected = () => {
+  return <RadioSelectedSvg testID="radioSelectedSvg" />;
+};
+
+export const SvgRadioNotSelected = () => {
+  return <RadioNotSelectedSvg testID="radioNotSelectedSvg" />;
 };

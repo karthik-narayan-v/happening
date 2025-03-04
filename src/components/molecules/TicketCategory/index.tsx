@@ -1,11 +1,12 @@
 import React from 'react';
 import {Svg, Rect, Defs, LinearGradient, Stop} from 'react-native-svg';
-import {Box, Text} from '@gluestack-ui/themed';
+import {Box, Heading, Text} from '@gluestack-ui/themed';
 
 export type TicketCategoryProps = {
   startColor: string;
   endColor: string;
-  text: string;
+  ticketClass: string;
+  price: string;
   height: number;
   isLast?: boolean;
 };
@@ -13,7 +14,8 @@ export type TicketCategoryProps = {
 const TicketCategory: React.FC<TicketCategoryProps> = ({
   startColor,
   endColor,
-  text,
+  ticketClass,
+  price,
   height,
   isLast = false,
 }) => {
@@ -26,8 +28,8 @@ const TicketCategory: React.FC<TicketCategoryProps> = ({
       backgroundColor="#FBFBFB"
       borderWidth={1}
       borderColor="#EEE6F9"
-      borderBottomEndRadius={isLast ? 10 : 0}>
-      {/* SVG Linear Gradient */}
+      borderBottomLeftRadius={isLast ? 10 : 0}
+      borderBottomRightRadius={isLast ? 10 : 0}>
       <Svg height="100%" width="100%" style={{position: 'absolute'}}>
         <Defs>
           <LinearGradient id="grad" x1="0" y1="0" x2="1" y2="1">
@@ -38,11 +40,24 @@ const TicketCategory: React.FC<TicketCategoryProps> = ({
         <Rect width="100%" height="100%" fill="url(#grad)" />
       </Svg>
 
-      {/* Content inside the Box */}
-
-      <Text color="$white" fontWeight="$bold">
-        {text}
-      </Text>
+      <Box marginVertical={-20} flexDirection="row" alignItems="center" gap={4}>
+        <Heading
+          fontFamily="Inter-Regular"
+          fontWeight={400}
+          fontSize={14}
+          lineHeight={17}
+          color="$white">
+          {ticketClass}
+        </Heading>
+        <Heading
+          fontFamily="Poppins-Regular"
+          fontWeight={400}
+          fontSize={14}
+          lineHeight={21}
+          color="$white">
+          {price}
+        </Heading>
+      </Box>
     </Box>
   );
 };

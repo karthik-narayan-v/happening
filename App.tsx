@@ -20,6 +20,7 @@ import Account from './src/components/pages/Account';
 import Booking from './src/components/pages/Booking';
 import Search from './src/components/pages/Search';
 import Wishlist from './src/components/pages/Wishlist';
+import {LocationProvider} from './src/contexts/LocationContext';
 
 const appPages: Array<AppPage> = [
   {screenName: 'Login', componentName: Login},
@@ -37,7 +38,9 @@ const App = (): ReactElement => {
   return (
     <NavigationContainer>
       <GluestackUIProvider config={defaultTheme}>
-        <RootStackNavigator appPagesArray={appPages} />
+        <LocationProvider>
+          <RootStackNavigator appPagesArray={appPages} />
+        </LocationProvider>
       </GluestackUIProvider>
     </NavigationContainer>
   );

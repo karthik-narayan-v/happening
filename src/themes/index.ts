@@ -12,6 +12,7 @@ export const defaultTheme = createConfig({
       primary600: '#7E2CCF',
       primary100: '#EEE6F9',
       primary300: '#F9F5FD',
+      secondary900: '#5A5A5A',
       secondary800: '#E6E6E6',
       secondary700: '#F1E6FF',
       secondary600: '#5F6368',

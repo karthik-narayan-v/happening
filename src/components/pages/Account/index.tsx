@@ -9,46 +9,20 @@ import {
   ActionsheetDragIndicatorWrapper,
   ActionsheetItem,
   ActionsheetItemText,
+  Box,
   Button,
   ButtonText,
+  Heading,
+  VStack,
 } from '@gluestack-ui/themed';
 import {View} from 'react-native';
+import ComingSoon from '../../../components/molecules/ComingSoon';
 
 const Account = ({navigation}: RootStackScreenProps<'Account'>) => {
-  const [isOpen, setIsOpen] = useState(false);
-
-  const openActionSheet = () => setIsOpen(true);
-  const closeActionSheet = () => setIsOpen(false);
-
   return (
-    <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-      {/* Button to Open ActionSheet */}
-      <Button onPress={openActionSheet}>
-        <ButtonText>Open ActionSheet</ButtonText>
-      </Button>
-
-      {/* ActionSheet Component */}
-      <View>
-        <Actionsheet isOpen={isOpen} onClose={() => setIsOpen(false)}>
-          <ActionsheetBackdrop />
-          <ActionsheetContent>
-            <ActionsheetDragIndicatorWrapper>
-              <ActionsheetDragIndicator />
-            </ActionsheetDragIndicatorWrapper>
-
-            <ActionsheetItem onPress={() => setIsOpen(false)}>
-              <ActionsheetItemText>Option 1</ActionsheetItemText>
-            </ActionsheetItem>
-            <ActionsheetItem onPress={() => setIsOpen(false)}>
-              <ActionsheetItemText>Option 2</ActionsheetItemText>
-            </ActionsheetItem>
-            <ActionsheetItem onPress={() => setIsOpen(false)}>
-              <ActionsheetItemText>Cancel</ActionsheetItemText>
-            </ActionsheetItem>
-          </ActionsheetContent>
-        </Actionsheet>
-      </View>
-    </View>
+    <Box width="100%" height="100%" backgroundColor="#FFF">
+      <ComingSoon />
+    </Box>
   );
 };
 

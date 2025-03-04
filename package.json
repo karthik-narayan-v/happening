@@ -23,6 +23,7 @@
     "react": "19.0.0",
     "react-dom": "^19.0.0",
     "react-native": "0.78.0",
+    "react-native-actions-sheet": "^0.9.7",
     "react-native-asset": "^2.1.1",
     "react-native-gesture-handler": "^2.24.0",
     "react-native-safe-area-context": "^5.2.0",
