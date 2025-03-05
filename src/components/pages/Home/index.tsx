@@ -121,16 +121,16 @@ const Home = ({navigation}: RootStackScreenProps<'Home'>) => {
         horizontal
         marginLeft={24}
         showsHorizontalScrollIndicator={false}
-        keyExtractor={(item, index) => index.toString()}
+        keyExtractor={(item, index) => `category-${index}`}
         renderItem={({item}: any) => (
           <Box>
             {item.map((listItem: any) => (
               <Box
+                key={listItem.id}
                 marginRight={16}
                 width={90}
                 height={90}
                 borderRadius={10}
-                key={listItem.id}
                 flexDirection="row"
                 alignItems="flex-end"
                 justifyContent="center">
@@ -177,12 +177,14 @@ const Home = ({navigation}: RootStackScreenProps<'Home'>) => {
         marginTop={24}
         marginLeft={24}
         showsHorizontalScrollIndicator={false}
-        keyExtractor={(item, index) => index.toString()}
+        keyExtractor={(item, index) => `popular-${index}`}
         renderItem={({item}: any) => (
           <Box>
             {item.map((listItem: any) => (
-              <Pressable onPress={() => navigation.navigate('EventDetail', {id: listItem.id})}>
-                <Box key={listItem.id} paddingRight={16}>
+              <Pressable
+                key={listItem.id}
+                onPress={() => navigation.navigate('EventDetail', {id: listItem.id})}>
+                <Box paddingRight={16}>
                   <Image
                     resizeMode="cover"
                     source={images[listItem.image]}
@@ -212,7 +214,7 @@ const Home = ({navigation}: RootStackScreenProps<'Home'>) => {
         marginTop={24}
         marginLeft={24}
         showsHorizontalScrollIndicator={false}
-        keyExtractor={(item, index) => index.toString()}
+        keyExtractor={(item, index) => `resume-${index}`}
         renderItem={({item}: any) => (
           <Box marginRight={24}>
             {item.map((listItem: any) => (

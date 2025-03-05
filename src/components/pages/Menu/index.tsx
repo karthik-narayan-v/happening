@@ -141,34 +141,19 @@ const getIconForTab = (
 
 const Menu = () => {
   const white = useToken('colors', 'white');
+  const HomeStack = () => createStack('MenuHome', Home);
+  const BookingStack = () => createStack('MenuBooking', Booking);
+  const SearchStack = () => createStack('MenuSearch', Search);
+  const WishlistStack = () => createStack('MenuWishlist', Wishlist);
+  const AccountStack = () => createStack('MenuAccount', Account);
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: white}} edges={['top', 'bottom']}>
       <Tab.Navigator tabBar={props => <CustomTabBar {...props} />}>
-        <Tab.Screen
-          name="Home"
-          options={screenOptions}
-          component={() => createStack('Home', Home)}
-        />
-        <Tab.Screen
-          name="Booking"
-          options={screenOptions}
-          component={() => createStack('Booking', Booking)}
-        />
-        <Tab.Screen
-          name="Search"
-          options={screenOptions}
-          component={() => createStack('Search', Search)}
-        />
-        <Tab.Screen
-          name="Wishlist"
-          options={screenOptions}
-          component={() => createStack('Wishlist', Wishlist)}
-        />
-        <Tab.Screen
-          name="Account"
-          options={screenOptions}
-          component={() => createStack('Account', Account)}
-        />
+        <Tab.Screen name="Home" options={screenOptions} component={HomeStack} />
+        <Tab.Screen name="Booking" options={screenOptions} component={BookingStack} />
+        <Tab.Screen name="Search" options={screenOptions} component={SearchStack} />
+        <Tab.Screen name="Wishlist" options={screenOptions} component={WishlistStack} />
+        <Tab.Screen name="Account" options={screenOptions} component={AccountStack} />
       </Tab.Navigator>
     </SafeAreaView>
   );

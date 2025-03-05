@@ -282,8 +282,9 @@ const EventDetail = ({navigation, route}: RootStackScreenProps<'EventDetail'>) =
             fontSize={14}>
             {'Policies & Rules'}
           </Heading>
-          {event?.policies.map((item: any) => (
+          {event?.policies.map((item: any, index: number) => (
             <Heading
+              key={`policy-${index}`}
               marginVertical={'$0'}
               color={secondary500}
               fontFamily="Poppins-Regular"
@@ -304,8 +305,9 @@ const EventDetail = ({navigation, route}: RootStackScreenProps<'EventDetail'>) =
             fontSize={14}>
             {'Offers for you'}
           </Heading>
-          {event?.offers.map((item: any) => (
+          {event?.offers.map((item: any, index: number) => (
             <Heading
+              key={`offer-${index}`}
               marginVertical={'$0'}
               color={secondary500}
               fontFamily="Poppins-Regular"
