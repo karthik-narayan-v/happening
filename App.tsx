@@ -21,6 +21,8 @@ import Booking from './src/components/pages/Booking';
 import Search from './src/components/pages/Search';
 import Wishlist from './src/components/pages/Wishlist';
 import {LocationProvider} from './src/contexts/LocationContext';
+import {Provider} from 'react-redux';
+import {store} from './src/store';
 
 const appPages: Array<AppPage> = [
   {screenName: 'Login', componentName: Login},
@@ -36,13 +38,15 @@ const appPages: Array<AppPage> = [
 
 const App = (): ReactElement => {
   return (
-    <NavigationContainer>
-      <GluestackUIProvider config={defaultTheme}>
-        <LocationProvider>
-          <RootStackNavigator appPagesArray={appPages} />
-        </LocationProvider>
-      </GluestackUIProvider>
-    </NavigationContainer>
+    <Provider store={store}>
+      <NavigationContainer>
+        <GluestackUIProvider config={defaultTheme}>
+          <LocationProvider>
+            <RootStackNavigator appPagesArray={appPages} />
+          </LocationProvider>
+        </GluestackUIProvider>
+      </NavigationContainer>
+    </Provider>
   );
 };
 

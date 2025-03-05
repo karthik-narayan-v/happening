@@ -1,15 +1,17 @@
 import React, {ReactNode} from 'react';
-import {Svg, Rect, Defs, LinearGradient, Stop} from 'react-native-svg';
-import {Box, Heading, Text, useToken} from '@gluestack-ui/themed';
+import {useDispatch, useSelector} from 'react-redux';
+import {incrementSeat, decrementSeat} from '../../../store';
+import {RootState} from '../../../store';
+import {Box, Heading, useToken} from '@gluestack-ui/themed';
 import {SvgMinus, SvgPlus} from '../../../models/Image';
+import {Pressable} from 'react-native';
 
 export type SelectTicketProps = {
   leftIcon: ReactNode;
   ticketClass: string;
   price: string;
   seats: number;
-  selectedSeats: number;
-  onSeatChange: () => void;
+  ticketClassId: string;
 };
 
 const SelectTicket: React.FC<SelectTicketProps> = ({
@@ -17,12 +19,25 @@ const SelectTicket: React.FC<SelectTicketProps> = ({
   ticketClass,
   price,
   seats,
-  selectedSeats,
-  onSeatChange,
+  ticketClassId,
 }) => {
+  const dispatch = useDispatch();
+  const selectedSeats = useSelector(
+    (state: RootState) => state.seats.selectedSeats[ticketClassId] || 0,
+  );
+
   const primary600 = useToken('colors', 'primary600');
   const primary300 = useToken('colors', 'primary300');
   const coolGray100 = useToken('colors', 'coolGray100');
+
+  const handleDecrement = () => {
+    dispatch(decrementSeat({ticketClassId, price: parseInt(price.replace(/[^0-9]/g, ''))}));
+  };
+
+  const handleIncrement = () => {
+    dispatch(incrementSeat({ticketClassId, price: parseInt(price.replace(/[^0-9]/g, ''))}));
+  };
+
   return (
     <Box
       borderWidth={1}
@@ -44,7 +59,6 @@ const SelectTicket: React.FC<SelectTicketProps> = ({
           fontSize={14}>
           {ticketClass}
         </Heading>
-
         <Heading
           marginVertical={'$0'}
           color="$gray300"
@@ -65,16 +79,20 @@ const SelectTicket: React.FC<SelectTicketProps> = ({
         </Heading>
       </Box>
       <Box flexDirection="row" alignItems="center" gap={18}>
-        <Box
-          width={24}
-          height={24}
-          backgroundColor={primary300}
-          borderWidth={1}
-          borderColor={selectedSeats > 0 ? primary600 : coolGray100}
-          justifyContent="center"
-          alignItems="center">
-          <SvgMinus />
-        </Box>
+        <Pressable onPress={selectedSeats > 0 ? handleDecrement : undefined}>
+          <Box
+            width={24}
+            height={24}
+            backgroundColor={primary300}
+            borderWidth={1}
+            opacity={selectedSeats > 0 ? 1 : 0.2}
+            borderColor={primary600}
+            justifyContent="center"
+            alignItems="center">
+            <SvgMinus />
+          </Box>
+        </Pressable>
+
         <Heading
           marginVertical={'$0'}
           padding={4}
@@ -85,16 +103,19 @@ const SelectTicket: React.FC<SelectTicketProps> = ({
           fontSize={14}>
           {selectedSeats}
         </Heading>
-        <Box
-          width={24}
-          height={24}
-          backgroundColor={primary300}
-          borderWidth={1}
-          borderColor={selectedSeats <= seats ? primary600 : coolGray100}
-          justifyContent="center"
-          alignItems="center">
-          <SvgPlus />
-        </Box>
+        <Pressable onPress={selectedSeats < seats ? handleIncrement : undefined}>
+          <Box
+            width={24}
+            height={24}
+            opacity={selectedSeats < seats ? 1 : 0.2}
+            backgroundColor={primary300}
+            borderWidth={1}
+            borderColor={primary600}
+            justifyContent="center"
+            alignItems="center">
+            <SvgPlus />
+          </Box>
+        </Pressable>
       </Box>
     </Box>
   );

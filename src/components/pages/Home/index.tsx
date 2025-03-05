@@ -63,7 +63,7 @@ const Home = ({navigation}: RootStackScreenProps<'Home'>) => {
     const updatedShows = resumeShows.filter((show: any) => show[0].id !== id);
     setResumeShows(updatedShows);
   };
-  const {handlePopup} = useContext(LocationContext);
+  const {selectedLocation, handlePopup} = useContext(LocationContext);
   const onBarPress = () => {
     handlePopup(true);
   };
@@ -89,7 +89,7 @@ const Home = ({navigation}: RootStackScreenProps<'Home'>) => {
               fontWeight={500}
               lineHeight={21}
               fontSize={14}>
-              Bangalore
+              {selectedLocation.city}
             </Heading>
             <Heading
               marginVertical={'$0'}
@@ -98,7 +98,7 @@ const Home = ({navigation}: RootStackScreenProps<'Home'>) => {
               fontWeight={400}
               lineHeight={18}
               fontSize={12}>
-              #2 KR Layout, Indiranagar
+              {selectedLocation.address}
             </Heading>
           </VStack>
         </Box>

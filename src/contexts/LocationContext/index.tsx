@@ -1,39 +1,38 @@
 import {Box, Button, ButtonText, Heading, Switch, VStack} from '@gluestack-ui/themed';
 import React, {createContext, useMemo, useState, useRef} from 'react';
-import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
+import {View, Text, TouchableOpacity, StyleSheet, Pressable} from 'react-native';
 import ActionSheet, {ActionSheetRef} from 'react-native-actions-sheet';
 import {SvgLocation, SvgRadioNotSelected, SvgRadioSelected} from '../../models/Image';
 
-// Context Type Definition
 export type LocationContextType = {
   selectedLocation: {
     city: string;
     address: string;
   };
   handlePopup: (isOpen: boolean) => void;
-  changeLocation: (city: string, address: string) => void;
 };
 
-// Create Context with Default Values
 const LocationContext = createContext<LocationContextType>({
   selectedLocation: {
     city: 'Bangalore',
-    address: 'MG Road, Bangalore',
+    address: '#2 KR Layout, Indiranagar',
   },
   handlePopup: () => {},
-  changeLocation: () => {},
 });
 
 const LocationProvider = ({children}: {children: React.ReactNode}) => {
-  // State for Selected Location
   const [selectedLocation, setSelectedLocation] = useState({
     city: 'Bangalore',
-    address: 'MG Road, Bangalore',
+    address: '#2 KR Layout, Indiranagar',
   });
+
+  const recentLocations = [
+    {city: 'Saket', address: 'Saket, 2nd main, Saket main road'},
+    {city: 'Delhi', address: 'Sheikh Sarai, #14 JL Road, Delhi'},
+  ];
 
   const actionSheetRef = useRef<ActionSheetRef>(null);
 
-  // Function to Show/Hide Modal
   const handlePopup = (isOpen: boolean) => {
     if (isOpen) {
       actionSheetRef.current?.show();
@@ -42,22 +41,17 @@ const LocationProvider = ({children}: {children: React.ReactNode}) => {
     }
   };
 
-  // Function to Change Location
   const changeLocation = (city: string, address: string) => {
     setSelectedLocation({city, address});
-    handlePopup(false);
   };
 
-  const value = useMemo(
-    () => ({selectedLocation, handlePopup, changeLocation}),
-    [selectedLocation],
-  );
+  const value = useMemo(() => ({selectedLocation, handlePopup}), [selectedLocation]);
 
   return (
     <LocationContext.Provider value={value}>
       {children}
 
-      <ActionSheet ref={actionSheetRef}>
+      <ActionSheet ref={actionSheetRef} closeOnTouchBackdrop={false}>
         <VStack
           paddingHorizontal={24}
           paddingVertical={16}
@@ -85,7 +79,7 @@ const LocationProvider = ({children}: {children: React.ReactNode}) => {
               width={34}
               height={34}
               defaultValue={true}
-              trackColor={{false: '$secondary500', true: '$primary600'}}
+              trackColor={{false: '$secondary500', true: '$primary700'}}
               thumbColor={'$primary600'}
             />
           </Box>
@@ -98,39 +92,47 @@ const LocationProvider = ({children}: {children: React.ReactNode}) => {
             color="$black">
             {'Current Location'}
           </Heading>
-          <Box
-            alignItems="center"
-            flexDirection="row"
-            backgroundColor="$primary300"
-            paddingVertical={4}
-            borderRadius={5}
-            paddingHorizontal={12}
-            justifyContent="space-between">
-            <Box alignItems="center" flexDirection="row" gap={12}>
-              {SvgLocation('20px', '25px')}
-              <VStack>
-                <Heading
-                  marginVertical={'$0'}
-                  color="$primary600"
-                  fontFamily="Poppins-Regular"
-                  fontWeight={500}
-                  lineHeight={21}
-                  fontSize={14}>
-                  Bangalore
-                </Heading>
-                <Heading
-                  marginVertical={'$0'}
-                  color="$black"
-                  fontFamily="Poppins-Regular"
-                  fontWeight={400}
-                  lineHeight={18}
-                  fontSize={12}>
-                  #2 KR Layout, Indiranagar
-                </Heading>
-              </VStack>
+          <Pressable onPress={() => changeLocation('Bangalore', '#2 KR Layout, Indiranagar')}>
+            <Box
+              alignItems="center"
+              flexDirection="row"
+              backgroundColor="$primary300"
+              paddingVertical={4}
+              borderRadius={5}
+              paddingHorizontal={12}
+              justifyContent="space-between">
+              <Box alignItems="center" flexDirection="row" gap={12}>
+                {SvgLocation('20px', '25px')}
+                <VStack>
+                  <Heading
+                    marginVertical={'$0'}
+                    color="$primary600"
+                    fontFamily="Poppins-Regular"
+                    fontWeight={500}
+                    lineHeight={21}
+                    fontSize={14}>
+                    Bangalore
+                  </Heading>
+                  <Heading
+                    marginVertical={'$0'}
+                    color="$black"
+                    fontFamily="Poppins-Regular"
+                    fontWeight={400}
+                    lineHeight={18}
+                    fontSize={12}>
+                    #2 KR Layout, Indiranagar
+                  </Heading>
+                </VStack>
+              </Box>
+              {selectedLocation.city === 'Bangalore' &&
+              selectedLocation.address === '#2 KR Layout, Indiranagar' ? (
+                <SvgRadioSelected />
+              ) : (
+                <SvgRadioNotSelected />
+              )}
             </Box>
-            <SvgRadioSelected />
-          </Box>
+          </Pressable>
+
           <Heading
             m={'$0'}
             fontFamily="Poppins-Regular"
@@ -140,50 +142,36 @@ const LocationProvider = ({children}: {children: React.ReactNode}) => {
             color="$black">
             {'Recent Locations'}
           </Heading>
-          <Box>
-            <Box
-              alignItems="center"
-              flexDirection="row"
-              paddingVertical={4}
-              borderRadius={5}
-              paddingHorizontal={12}
-              justifyContent="space-between">
-              <Box alignItems="center" flexDirection="row" gap={12}>
-                {SvgLocation('16px', '20px')}
-                <Heading
-                  marginVertical={'$0'}
-                  color="$black"
-                  fontFamily="Poppins-Regular"
-                  fontWeight={400}
-                  lineHeight={31}
-                  fontSize={14}>
-                  Saket, 2nd main, Saket main road
-                </Heading>
+          {recentLocations.map((location, index) => (
+            <Pressable key={index} onPress={() => changeLocation(location.city, location.address)}>
+              <Box
+                alignItems="center"
+                flexDirection="row"
+                paddingVertical={4}
+                borderRadius={5}
+                paddingHorizontal={12}
+                justifyContent="space-between">
+                <Box alignItems="center" flexDirection="row" gap={12}>
+                  {SvgLocation('16px', '20px')}
+                  <Heading
+                    marginVertical={'$0'}
+                    color="$black"
+                    fontFamily="Poppins-Regular"
+                    fontWeight={400}
+                    lineHeight={31}
+                    fontSize={14}>
+                    {location.address}
+                  </Heading>
+                </Box>
+                {selectedLocation.city === location.city &&
+                selectedLocation.address === location.address ? (
+                  <SvgRadioSelected />
+                ) : (
+                  <SvgRadioNotSelected />
+                )}
               </Box>
-              <SvgRadioNotSelected />
-            </Box>
-            <Box
-              alignItems="center"
-              flexDirection="row"
-              paddingVertical={4}
-              borderRadius={5}
-              paddingHorizontal={12}
-              justifyContent="space-between">
-              <Box alignItems="center" flexDirection="row" gap={12}>
-                {SvgLocation('16px', '20px')}
-                <Heading
-                  marginVertical={'$0'}
-                  color="$black"
-                  fontFamily="Poppins-Regular"
-                  fontWeight={400}
-                  lineHeight={31}
-                  fontSize={14}>
-                  Sheikh Sarai, #14 JL Road, Delhi
-                </Heading>
-              </Box>
-              <SvgRadioNotSelected />
-            </Box>
-          </Box>
+            </Pressable>
+          ))}
 
           <Box marginTop={24}>
             <Button

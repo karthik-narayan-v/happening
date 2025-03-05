@@ -22,6 +22,8 @@ import TicketCategory from '../../../components/molecules/TicketCategory';
 import SelectTicket from '../../../components/molecules/SelectTicket';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import tickets from '../../../models/json/tickets';
+import {useSelector} from 'react-redux';
+import {RootState} from '../../../store';
 const TicketSelection = ({navigation, route}: RootStackScreenProps<'TicketSelection'>) => {
   const id = route.params.id;
   const ticketDetails = tickets.find(ticket => ticket.id === id)?.ticketsList || [];
@@ -33,6 +35,13 @@ const TicketSelection = ({navigation, route}: RootStackScreenProps<'TicketSelect
   const secondary800 = useToken('colors', 'secondary800');
   const secondary400 = useToken('colors', 'secondary400');
   const insets = useSafeAreaInsets();
+  const totalPrice = useSelector((state: RootState) => state.seats.totalPrice);
+  const selectedSeats = useSelector((state: RootState) =>
+    Object.values(state.seats.selectedSeats).reduce((acc, val) => acc + val, 0),
+  );
+  const formatPrice = (price: number) => {
+    return `${new Intl.NumberFormat('en-IN').format(price)}`;
+  };
 
   return (
     <VStack width={'100%'} height={'100%'} backgroundColor="$white">
@@ -143,8 +152,7 @@ const TicketSelection = ({navigation, route}: RootStackScreenProps<'TicketSelect
             ticketClass={`${ticket.ticketClass} Class`}
             price={`₹ ${ticket.price}`}
             seats={ticket.seats}
-            selectedSeats={0}
-            onSeatChange={() => {}}
+            ticketClassId={String(ticket.ticketClassId)}
           />
         ))}
       </ScrollView>
@@ -168,7 +176,7 @@ const TicketSelection = ({navigation, route}: RootStackScreenProps<'TicketSelect
               fontWeight={600}
               lineHeight={22}
               fontSize={18}>
-              {'₹'}
+              {'₹ '}
               <Heading
                 marginVertical={'$0'}
                 color="$primary600"
@@ -176,7 +184,7 @@ const TicketSelection = ({navigation, route}: RootStackScreenProps<'TicketSelect
                 fontWeight={600}
                 lineHeight={27}
                 fontSize={18}>
-                {' 0'}
+                {formatPrice(totalPrice)}
               </Heading>
             </Heading>
             <Heading
@@ -186,7 +194,7 @@ const TicketSelection = ({navigation, route}: RootStackScreenProps<'TicketSelect
               fontWeight={400}
               lineHeight={21}
               fontSize={14}>
-              {' for 0 seats'}
+              {` for ${selectedSeats} seats`}
             </Heading>
           </Box>
           <Heading
@@ -196,7 +204,7 @@ const TicketSelection = ({navigation, route}: RootStackScreenProps<'TicketSelect
             fontWeight={400}
             lineHeight={21}
             fontSize={14}>
-            {'+0 tax & fees'}
+            {'+199 tax & fees'}
           </Heading>
         </VStack>
 
