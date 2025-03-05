@@ -20,15 +20,29 @@ import {
 } from '@gluestack-ui/themed';
 import TicketCategory from '../../../components/molecules/TicketCategory';
 import SelectTicket from '../../../components/molecules/SelectTicket';
-const TicketSelection = ({navigation}: RootStackScreenProps<'TicketSelection'>) => {
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import tickets from '../../../models/json/tickets';
+const TicketSelection = ({navigation, route}: RootStackScreenProps<'TicketSelection'>) => {
+  const id = route.params.id;
+  const ticketDetails = tickets.find(ticket => ticket.id === id)?.ticketsList || [];
+
   const handleBack = () => {
     navigation.goBack();
   };
+
   const secondary800 = useToken('colors', 'secondary800');
   const secondary400 = useToken('colors', 'secondary400');
+  const insets = useSafeAreaInsets();
+
   return (
     <VStack width={'100%'} height={'100%'} backgroundColor="$white">
-      <Box width={'100%'} flexDirection="row" padding={24} gap={12} alignItems="center">
+      <Box
+        width={'100%'}
+        flexDirection="row"
+        padding={24}
+        marginTop={insets.bottom}
+        gap={12}
+        alignItems="center">
         <Pressable onPress={handleBack}>
           <SvgChevronLeft />
         </Pressable>
@@ -42,12 +56,12 @@ const TicketSelection = ({navigation}: RootStackScreenProps<'TicketSelection'>) 
           {'Select Seats'}
         </Heading>
       </Box>
+
       <ScrollView height={'100%'}>
         <Box width={'100%'} paddingHorizontal={24} marginBottom={24}>
           <Box
             height={60}
             width={'100%'}
-            alignContent="center"
             backgroundColor="$white100"
             borderWidth={1}
             borderColor="$primary100"
@@ -74,28 +88,33 @@ const TicketSelection = ({navigation}: RootStackScreenProps<'TicketSelection'>) 
               </Heading>
             </Box>
           </Box>
-          <TicketCategory
-            startColor={'#ABAAD4'}
-            endColor={'#59586E'}
-            ticketClass="Platinum class"
-            price="₹ 1,480"
-            height={40}
-          />
-          <TicketCategory
-            startColor={'#FAC38C'}
-            endColor={'#947353'}
-            ticketClass="Gold Class"
-            price="₹ 800"
-            height={50}
-          />
-          <TicketCategory
-            startColor={'#DBDBDB'}
-            endColor={'#757575'}
-            ticketClass="Silver Class"
-            price="₹ 480"
-            height={80}
-            isLast={true}
-          />
+
+          {ticketDetails.map((ticket, index) => (
+            <TicketCategory
+              key={ticket.ticketClassId}
+              startColor={
+                ticket.ticketClass === 'Platinum'
+                  ? '#ABAAD4'
+                  : ticket.ticketClass === 'Gold'
+                    ? '#FAC38C'
+                    : '#DBDBDB'
+              }
+              endColor={
+                ticket.ticketClass === 'Platinum'
+                  ? '#59586E'
+                  : ticket.ticketClass === 'Gold'
+                    ? '#947353'
+                    : '#757575'
+              }
+              ticketClass={`${ticket.ticketClass} Class`}
+              price={`₹ ${ticket.price}`}
+              height={
+                ticket.ticketClass === 'Platinum' ? 40 : ticket.ticketClass === 'Gold' ? 50 : 80
+              }
+              isLast={index === ticketDetails.length - 1}
+            />
+          ))}
+
           <Heading
             marginTop={4}
             textAlign="center"
@@ -108,30 +127,26 @@ const TicketSelection = ({navigation}: RootStackScreenProps<'TicketSelection'>) 
             {'Seats Layout'}
           </Heading>
         </Box>
-        <SelectTicket
-          leftIcon={<SvgSilver />}
-          ticketClass={'Silver Class'}
-          price={'₹ 480'}
-          seats={8}
-          selectedSeats={1}
-          onSeatChange={() => {}}
-        />
-        <SelectTicket
-          leftIcon={<SvgGold />}
-          ticketClass={'Gold Class'}
-          price={'₹ 800'}
-          seats={5}
-          selectedSeats={0}
-          onSeatChange={() => {}}
-        />
-        <SelectTicket
-          leftIcon={<SvgPlatinum />}
-          ticketClass={'Platinum Class'}
-          price={'₹ 1,480'}
-          seats={8}
-          selectedSeats={1}
-          onSeatChange={() => {}}
-        />
+
+        {ticketDetails.map(ticket => (
+          <SelectTicket
+            key={ticket.ticketClassId}
+            leftIcon={
+              ticket.ticketClass === 'Platinum' ? (
+                <SvgPlatinum />
+              ) : ticket.ticketClass === 'Gold' ? (
+                <SvgGold />
+              ) : (
+                <SvgSilver />
+              )
+            }
+            ticketClass={`${ticket.ticketClass} Class`}
+            price={`₹ ${ticket.price}`}
+            seats={ticket.seats}
+            selectedSeats={0}
+            onSeatChange={() => {}}
+          />
+        ))}
       </ScrollView>
       <Box
         width={'100%'}
@@ -139,7 +154,8 @@ const TicketSelection = ({navigation}: RootStackScreenProps<'TicketSelection'>) 
         justifyContent="space-between"
         flexDirection="row"
         paddingHorizontal={24}
-        paddingVertical={16}
+        paddingBottom={16 + insets.bottom}
+        paddingTop={16}
         borderColor="$gray50"
         alignItems="center"
         backgroundColor="$white">
@@ -160,7 +176,7 @@ const TicketSelection = ({navigation}: RootStackScreenProps<'TicketSelection'>) 
                 fontWeight={600}
                 lineHeight={27}
                 fontSize={18}>
-                {' 1,480'}
+                {' 0'}
               </Heading>
             </Heading>
             <Heading
@@ -170,7 +186,7 @@ const TicketSelection = ({navigation}: RootStackScreenProps<'TicketSelection'>) 
               fontWeight={400}
               lineHeight={21}
               fontSize={14}>
-              {' for 1 seat'}
+              {' for 0 seats'}
             </Heading>
           </Box>
           <Heading
@@ -180,7 +196,7 @@ const TicketSelection = ({navigation}: RootStackScreenProps<'TicketSelection'>) 
             fontWeight={400}
             lineHeight={21}
             fontSize={14}>
-            {'+199 tax & fees'}
+            {'+0 tax & fees'}
           </Heading>
         </VStack>
 

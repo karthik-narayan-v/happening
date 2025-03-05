@@ -24,7 +24,8 @@ import {
   SvgMap,
 } from '../../../models/Image';
 import IconDetail from '../../../components/molecules/IconDetail';
-const EventDetail = ({navigation}: RootStackScreenProps<'EventDetail'>) => {
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
+const EventDetail = ({navigation, route}: RootStackScreenProps<'EventDetail'>) => {
   const [selectedTab, setSelectedTab] = useState(0);
   const [slotSelected, setSlotSelected] = useState(false);
   const detailSubTiles = ['About', 'Crew'];
@@ -35,17 +36,25 @@ const EventDetail = ({navigation}: RootStackScreenProps<'EventDetail'>) => {
   const secondary500 = useToken('colors', 'secondary500');
   const secondary400 = useToken('colors', 'secondary400');
   const primary700 = useToken('colors', 'primary700');
-  // const white100= useToken('colors', 'white100');
+  const insets = useSafeAreaInsets();
+  const {id} = route.params; // Get the selected event ID
+  const event: any = eventDetails.find(event => event?.id === id);
   return (
     <VStack width="100%" height="100%">
       <Box width={'100%'} height={'auto'}>
-        <Image
-          resizeMode="cover"
-          source={images[eventDetails[0].cover]}
-          alt={'cover image'}
-          style={{width: 'auto', height: 230}}
-        />
-        <Box position="absolute" height={230} paddingTop={24} justifyContent="space-between">
+        {event?.cover && (
+          <Image
+            resizeMode="cover"
+            source={images[event?.cover]}
+            alt={'cover image'}
+            style={{width: 'auto', height: 230 + insets.top}}
+          />
+        )}
+        <Box
+          position="absolute"
+          height={230 + insets.top}
+          paddingTop={24 + insets.top}
+          justifyContent="space-between">
           <Box flexDirection="row" width={'100%'} justifyContent="space-between">
             <Pressable onPress={handleBack}>
               <Box
@@ -101,20 +110,25 @@ const EventDetail = ({navigation}: RootStackScreenProps<'EventDetail'>) => {
           </Box>
         </Box>
       </Box>
-      <ScrollView backgroundColor="$white" paddingHorizontal={24} height={'100%'} width={'100%'}>
+      <ScrollView
+        backgroundColor="$white"
+        paddingHorizontal={24}
+        height={'100%'}
+        width={'100%'}
+        showsVerticalScrollIndicator={false}>
         <Heading
           color="$gray300"
           fontFamily="Poppins-Regular"
           fontWeight={500}
           lineHeight={27}
           fontSize={18}>
-          {eventDetails[0].title}
+          {event?.title}
         </Heading>
         <Box flexDirection="row" alignItems="center" justifyContent="space-between">
           <Box flexDirection="row" gap={16} alignItems="center" justifyContent="space-between">
             <IconDetail
               icon={<SvgFilledHeart />}
-              title={`${eventDetails[0].interested} intrested`}
+              title={`${event?.interested} intrested`}
               color={'$primary600'}
               gap={12}
               fontFamily="Inter-regular"
@@ -154,26 +168,22 @@ const EventDetail = ({navigation}: RootStackScreenProps<'EventDetail'>) => {
         </Box>
 
         <Box flexDirection="row" marginVertical={12} gap={16} alignItems="center">
-          <IconDetail icon={<SvgTime />} title={eventDetails[0].duration} color={secondary500} />
+          <IconDetail icon={<SvgTime />} title={event?.duration} color={secondary500} />
           <IconDetail
             icon={<SvgUser />}
-            title={`${eventDetails[0].ageCategory} years+`}
+            title={`${event?.ageCategory} years+`}
             color={secondary500}
           />
-          <IconDetail
-            icon={<SvgMusic />}
-            title={eventDetails[0].genre.join(', ')}
-            color={secondary500}
-          />
+          <IconDetail icon={<SvgMusic />} title={event?.genre.join(', ')} color={secondary500} />
         </Box>
         <IconDetail
           icon={<SvgLanguage />}
-          title={eventDetails[0].languages.join(', ')}
+          title={event?.languages.join(', ')}
           color={secondary500}
         />
         <IconDetail
           icon={<SvgCalendar />}
-          title={eventDetails[0].eventDate}
+          title={event?.eventDate}
           color={secondary500}
           marginVertical={12}
         />
@@ -194,7 +204,7 @@ const EventDetail = ({navigation}: RootStackScreenProps<'EventDetail'>) => {
             fontWeight={500}
             lineHeight={17}
             fontSize={14}>
-            {eventDetails[0].priceRange}
+            {event?.priceRange}
           </Heading>
         </Box>
         <Box borderWidth={1} borderColor={primary700} marginVertical={12} />
@@ -207,7 +217,7 @@ const EventDetail = ({navigation}: RootStackScreenProps<'EventDetail'>) => {
             fontWeight={500}
             lineHeight={21}
             fontSize={14}>
-            {eventDetails[0].location}
+            {event?.location}
           </Heading>
           <SvgInfo />
         </Box>
@@ -227,7 +237,7 @@ const EventDetail = ({navigation}: RootStackScreenProps<'EventDetail'>) => {
                 fontWeight={400}
                 lineHeight={21}
                 fontSize={14}>
-                {eventDetails[0].slot.time}
+                {event?.slot.time}
               </Heading>
             </Box>
           </Pressable>
@@ -239,7 +249,7 @@ const EventDetail = ({navigation}: RootStackScreenProps<'EventDetail'>) => {
             fontWeight={400}
             lineHeight={18}
             fontSize={12}>
-            {`${eventDetails[0].slot.tickets} seats left`}
+            {`${event?.slot.tickets} seats left`}
           </Heading>
         </Box>
         <Box marginTop={12} flexDirection="row" alignItems="center" gap={16}>
@@ -272,7 +282,7 @@ const EventDetail = ({navigation}: RootStackScreenProps<'EventDetail'>) => {
             fontSize={14}>
             {'Policies & Rules'}
           </Heading>
-          {eventDetails[0].policies.map(item => (
+          {event?.policies.map((item: any) => (
             <Heading
               marginVertical={'$0'}
               color={secondary500}
@@ -294,7 +304,7 @@ const EventDetail = ({navigation}: RootStackScreenProps<'EventDetail'>) => {
             fontSize={14}>
             {'Offers for you'}
           </Heading>
-          {eventDetails[0].offers.map(item => (
+          {event?.offers.map((item: any) => (
             <Heading
               marginVertical={'$0'}
               color={secondary500}
@@ -312,7 +322,8 @@ const EventDetail = ({navigation}: RootStackScreenProps<'EventDetail'>) => {
         width={'100%'}
         borderWidth={1}
         paddingHorizontal={12}
-        paddingVertical={16}
+        paddingTop={16}
+        paddingBottom={16 + insets.bottom}
         justifyContent={'flex-end'}
         flexDirection="row"
         borderColor="$gray50"
@@ -337,7 +348,7 @@ const EventDetail = ({navigation}: RootStackScreenProps<'EventDetail'>) => {
           borderColor="#D9D9D9"
           paddingHorizontal={16}
           paddingVertical={4}
-          onPress={slotSelected ? () => navigation.navigate('TicketSelection') : () => {}}
+          onPress={slotSelected ? () => navigation.navigate('TicketSelection', {id}) : () => {}}
           opacity={slotSelected ? 1 : 0.7}>
           <ButtonText
             fontFamily="Poppins-Regular"

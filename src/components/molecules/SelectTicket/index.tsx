@@ -44,6 +44,7 @@ const SelectTicket: React.FC<SelectTicketProps> = ({
           fontSize={14}>
           {ticketClass}
         </Heading>
+
         <Heading
           marginVertical={'$0'}
           color="$gray300"

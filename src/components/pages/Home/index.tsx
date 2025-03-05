@@ -15,7 +15,7 @@ const Home = ({navigation}: RootStackScreenProps<'Home'>) => {
   const renderEventTab = () => {
     const primary100 = useToken('colors', 'primary100');
     return (
-      <Box marginTop={24} width={'100%'} flexDirection="row" paddingHorizontal={24}>
+      <Box marginTop={24} flexDirection="row" paddingHorizontal={24}>
         {eventTypes.map((item: string, index: number) => {
           const isSelected = selectedEvent === index;
 
@@ -58,12 +58,17 @@ const Home = ({navigation}: RootStackScreenProps<'Home'>) => {
   const category = chunkArray(categories, 2);
   const popularShows = chunkArray(popular, 1);
   const resumingShows = chunkArray(resumeshow, 1);
+  const [resumeShows, setResumeShows] = useState(resumingShows);
+  const handleRemoveShow = (id: string) => {
+    const updatedShows = resumeShows.filter((show: any) => show[0].id !== id);
+    setResumeShows(updatedShows);
+  };
   const {handlePopup} = useContext(LocationContext);
   const onBarPress = () => {
     handlePopup(true);
   };
   return (
-    <ScrollView height={'100%'} backgroundColor="$white">
+    <ScrollView height={'100%'} backgroundColor="$white" showsVerticalScrollIndicator={false}>
       <Pressable onPress={onBarPress}>
         <Box
           alignItems="center"
@@ -174,18 +179,20 @@ const Home = ({navigation}: RootStackScreenProps<'Home'>) => {
         showsHorizontalScrollIndicator={false}
         keyExtractor={(item, index) => index.toString()}
         renderItem={({item}: any) => (
-          <Pressable onPress={() => navigation.navigate('EventDetail')}>
+          <Box>
             {item.map((listItem: any) => (
-              <Box key={listItem.id} paddingRight={16}>
-                <Image
-                  resizeMode="cover"
-                  source={images[listItem.image]}
-                  alt={listItem.image}
-                  style={{width: 300, height: 125, borderRadius: 10}}
-                />
-              </Box>
+              <Pressable onPress={() => navigation.navigate('EventDetail', {id: listItem.id})}>
+                <Box key={listItem.id} paddingRight={16}>
+                  <Image
+                    resizeMode="cover"
+                    source={images[listItem.image]}
+                    alt={listItem.image}
+                    style={{width: 300, height: 125, borderRadius: 10}}
+                  />
+                </Box>
+              </Pressable>
             ))}
-          </Pressable>
+          </Box>
         )}
       />
       <Heading
@@ -200,7 +207,7 @@ const Home = ({navigation}: RootStackScreenProps<'Home'>) => {
         Resume your booking
       </Heading>
       <FlatList
-        data={resumingShows}
+        data={resumeShows}
         horizontal
         marginTop={24}
         marginLeft={24}
@@ -216,17 +223,19 @@ const Home = ({navigation}: RootStackScreenProps<'Home'>) => {
                   resizeMode="cover"
                   style={{width: 110, height: 70, borderRadius: 10, position: 'absolute'}}
                 />
-                <Box
-                  justifyContent="center"
-                  alignItems="center"
-                  margin={4}
-                  width={18}
-                  height={18}
-                  backgroundColor="$primary300"
-                  alignSelf="flex-end"
-                  borderRadius={10}>
-                  <SvgClose />
-                </Box>
+                <Pressable onPress={() => handleRemoveShow(listItem.id)}>
+                  <Box
+                    justifyContent="center"
+                    alignItems="center"
+                    margin={4}
+                    width={18}
+                    height={18}
+                    backgroundColor="$primary300"
+                    alignSelf="flex-end"
+                    borderRadius={10}>
+                    <SvgClose />
+                  </Box>
+                </Pressable>
               </Box>
             ))}
           </Box>

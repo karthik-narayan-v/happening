@@ -1,10 +1,14 @@
 import {StackScreenProps} from '@react-navigation/stack';
 
 export type RootStackParamList = {
-  EventDetail: undefined;
+  EventDetail: {
+    id: string;
+  };
   Home: undefined;
   Login: undefined;
-  TicketSelection: undefined;
+  TicketSelection: {
+    id: string;
+  };
   Menu: undefined;
   Wishlist: undefined;
   Booking: undefined;
